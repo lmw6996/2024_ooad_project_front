@@ -43,12 +43,12 @@ const Home = () => {
     fetchArticles();
   }, []);
 
-  // 현재 페이지에 해당하는 기사들을 계산합니다
+  // 현재 페이지에 해당하는 기사들 계산
   const indexOfLastArticle = currentPage * articlesPerPage;
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
   const currentArticles = articles.slice(indexOfFirstArticle, indexOfLastArticle);
 
-  // 페이지 번호를 계산합니다
+  // 페이지 번호 계산
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(articles.length / articlesPerPage); i++) {
     pageNumbers.push(i);

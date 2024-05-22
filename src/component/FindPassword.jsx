@@ -7,7 +7,7 @@ const FindPassword = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // 비밀번호 재설정 로직 처리 (예: 서버로 요청)
+    
         console.log('Username:', username);
         console.log('Email:', email);
     };

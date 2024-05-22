@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './FindUsername.css';
-//import { useNavigate } from 'react-router-dom';
+
 
 const FindUsername = () => {
     const [email, setEmail] = useState('');
@@ -8,7 +8,7 @@ const FindUsername = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // 아이디 찾기 로직 처리 (예: 서버로 요청)
+        
         console.log('Email:', email);
     };
 

@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f0f0; /* 배경색 변경 */
+    background-color: #f0f0f0; 
 }
 
 .find-username-form {
@@ -11,14 +11,15 @@
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #fff; /* 폼 배경색 변경 */
+    background-color: #fff; 
 }
 
 .find-username-form h2 {
     margin-bottom: 10px;
     font-size: 24px;
     text-align: center;
-    color: #333; /* 제목 색상 변경 */
+    color: #333; 
+
 }
 
 .find-username-info {

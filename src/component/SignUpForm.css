@@ -46,14 +46,14 @@
 
   
     .check-button {
-    padding: 8px 10px; /* 버튼 크기 조정 */
+    padding: 8px 10px; 
     border: 1px solid #ccc;
     border-left: none;
     border-radius: 0 4px 4px 0;
     background-color: black;
     color: white;
     cursor: pointer;
-    font-size: 14px; /* 버튼 글씨 크기 조정 */
+    font-size: 14px; 
   }
   
   .check-button:hover {

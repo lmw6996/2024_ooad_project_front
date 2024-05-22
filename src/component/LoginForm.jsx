@@ -41,12 +41,7 @@ const LoginForm = () => {
         }
     };
 
-    /*const handleSubmit = (event) => {
-        event.preventDefault();
-        // 로그인 로직 처리 (예: 서버로 요청)
-        console.log('Username:', username);
-        console.log('Password:', password);
-    };*/
+    
 
     return (
         <div className="login-container">
