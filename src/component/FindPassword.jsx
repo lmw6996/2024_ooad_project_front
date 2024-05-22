@@ -45,5 +45,5 @@ const FindPassword = () => {
     );
 };
 
-export default FindPassword;
+export default FindPassword; 
 

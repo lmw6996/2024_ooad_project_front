@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './SignUpForm.css';
 
 const SignUpForm = () => {
-    const [userId, setUserId] = useState('');
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
-    const [nickname, setNickname] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [termsAgreed, setTermsAgreed] = useState(false);
+    const [privacyPolicyAgreed, setPrivacyPolicyAgreed] = useState(false);
+    const navigate = useNavigate();
 
-    const handleUserIdChange = (event) => {
-        setUserId(event.target.value);
+    const handleUsernameChange = (event) => {
+        setUsername(event.target.value);
     };
 
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
-    };
-
-    const handleNicknameChange = (event) => {
-        setNickname(event.target.value);
     };
 
     const handlePasswordChange = (event) => {
@@ -28,64 +28,84 @@ const SignUpForm = () => {
         setConfirmPassword(event.target.value);
     };
 
-    const handleDuplicateCheck = (fieldName) => {
-        // 중복 확인 로직을 구현하세요
-        console.log(`Checking duplicate for ${fieldName}`);
+    const handleTermsAgreementChange = () => {
+        setTermsAgreed(!termsAgreed);
     };
 
-    const handleSubmit = (event) => {
+    const handlePrivacyPolicyAgreementChange = () => {
+        setPrivacyPolicyAgreed(!privacyPolicyAgreed);
+    };
+    
+    const handleSignUp = async (event) => {
         event.preventDefault();
-        // 회원가입 로직 처리 (예: 서버로 요청)
-        console.log('User ID:', userId);
-        console.log('Email:', email);
-        console.log('Nickname:', nickname);
-        console.log('Password:', password);
-        console.log('Confirm Password:', confirmPassword);
+
+        if (password !== confirmPassword) {
+            setErrorMessage('비밀번호가 일치하지 않습니다.');
+            return;
+        }
+
+        const raw = JSON.stringify({
+            name: username,
+            email: email,
+            password: password
+        });
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: raw
+        };
+
+        try {
+            const response = await fetch('/member/join', requestOptions);
+            if (response.ok) {
+                navigate('/signup-complete');
+            } else {
+                const errorData = await response.json();
+                console.error('Sign up failed:', errorData);
+                alert('Sign up failed: ' + errorData.message);
+            }
+        } catch (error) {
+            console.error('Error signing up:', error);
+            alert('Error signing up: ' + error.message);
+        }
     };
 
     return (
         <div className="signup-container">
-            <form className="signup-form" onSubmit={handleSubmit}>
+            <form className="signup-form" onSubmit={handleSignUp}>
                 <h2>회원가입</h2>
-                <p>Q&A Place에 오신것을 환영합니다.</p>
-                <hr/>
+                <p>Q&A place에 오신 것을 환영합니다.</p>
+                <h3>계정 정보</h3>
                 <div className="form-group">
-                    <label htmlFor="userId">*아이디</label>
-                    <input 
-                        type="text" 
-                        id="userId" 
-                        value={userId} 
-                        onChange={handleUserIdChange} 
-                        placeholder="아이디를 입력하세요"
-                        required 
-                    />
-                    <button type="button" onClick={() => handleDuplicateCheck('userId')}>중복 확인</button>
+                    <label htmlFor="username">*아이디</label>
+                    
+                        <input 
+                            type="text" 
+                            id="username" 
+                            value={username} 
+                            onChange={handleUsernameChange} 
+                            placeholder="아이디를 입력하세요"
+                            required 
+                        />
+                        <button type="button" className="check-button">중복확인</button>
+                   
                 </div>
                 <div className="form-group">
                     <label htmlFor="email">*이메일</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        value={email} 
-                        onChange={handleEmailChange} 
-                        placeholder="이메일을 입력하세요"
-                        required 
-                    />
-                    <button type="button" onClick={() => handleDuplicateCheck('email')}>중복 확인</button>
+                    
+                        <input 
+                            type="email" 
+                            id="email" 
+                            value={email} 
+                            onChange={handleEmailChange} 
+                            placeholder="이메일을 입력하세요"
+                            required 
+                        />
+                        <button type="button" className="check-button">중복확인</button>
+                    
                 </div>
-                <div className="form-group">
-                    <label htmlFor="nickname">*닉네임</label>
-                    <input 
-                        type="text" 
-                        id="nickname" 
-                        value={nickname} 
-                        onChange={handleNicknameChange} 
-                        placeholder="닉네임을 입력하세요"
-                        required 
-                    />
-                    <button type="button" onClick={() => handleDuplicateCheck('nickname')}>중복 확인</button>
-                </div>
-                <hr/>
+                <h3>비밀번호 설정</h3>
                 <div className="form-group">
                     <label htmlFor="password">*비밀번호</label>
                     <input 
@@ -98,17 +118,42 @@ const SignUpForm = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="confirmPassword">*비밀번호 확인</label>
+                    <label htmlFor="confirm-password">*비밀번호 확인</label>
                     <input 
                         type="password" 
-                        id="confirmPassword" 
+                        id="confirm-password" 
                         value={confirmPassword} 
                         onChange={handleConfirmPasswordChange} 
                         placeholder="비밀번호를 다시 입력하세요"
                         required 
                     />
+                    {errorMessage && (
+                        <p className="error-message">{errorMessage}</p>
+                    )}
                 </div>
-                <button type="submit">회원가입</button>
+                <div className="form-group">
+                    <div className="checkbox-group">
+                        <input 
+                            type="checkbox" 
+                            id="terms-agreement" 
+                            checked={termsAgreed} 
+                            onChange={handleTermsAgreementChange} 
+                            required 
+                        />
+                        <label htmlFor="terms-agreement">이용약관에 동의합니다.</label>
+                    </div>
+                    <div className="checkbox-group">
+                        <input 
+                            type="checkbox" 
+                            id="privacy-policy-agreement" 
+                            checked={privacyPolicyAgreed} 
+                            onChange={handlePrivacyPolicyAgreementChange} 
+                            required 
+                        />
+                        <label htmlFor="privacy-policy-agreement">개인정보처리방침에 동의합니다.</label>
+                    </div>
+                </div>
+                <button type="submit" className="submit-button">회원가입</button>
             </form>
         </div>
     );
